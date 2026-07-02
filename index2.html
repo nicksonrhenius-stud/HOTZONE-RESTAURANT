@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotZone Food Ordering</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+   <header>
+    <h1>🔥 HotZone Restaurant 🔥</h1>
+    <p>Spicy • Tasty • 100% Halal</p>
+</header>
+
+    <section class="menu">
+
+    <!-- Burger -->
+    <div class="card" onclick="showMenu('burger')">
+        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd" alt="Burger">
+        <h2>🍔 Burger</h2>
+        <span class="arrow">▼</span>
+    </div>
+
+    <!-- Sandwich -->
+    <div class="card" onclick="showMenu('sandwich')">
+        <img src="https://images.unsplash.com/photo-1528735602780-2552fd46c7af" alt="Sandwich">
+        <h2>🥪 Sandwich</h2>
+        <span class="arrow">▼</span>
+    </div>
+
+    <!-- Meat -->
+    <div class="card" onclick="showMenu('meat')">
+        <img src="https://images.unsplash.com/photo-1529193591184-b1d58069ecdd" alt="Meat">
+        <h2>🍖 Meat</h2>
+        <span class="arrow">▼</span>
+    </div>
+
+    <!-- Mojito -->
+    <div class="card" onclick="showMenu('mojito')">
+        <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd" alt="Mojito">
+        <h2>🍹 Mojito</h2>
+        <span class="arrow">▼</span>
+    </div>
+
+    <!-- Milkshake -->
+    <div class="card" onclick="showMenu('milkshake')">
+        <img src="https://images.unsplash.com/photo-1572490122747-3968b75cc699" alt="Milkshake">
+        <h2>🥤 Milkshake</h2>
+        <span class="arrow">▼</span>
+    </div>
+
+    <!-- Fries -->
+    <div class="card" onclick="showMenu('fries')">
+        <img src="https://images.unsplash.com/photo-1576107232684-1279f390859f" alt="Fries">
+        <h2>🍟 Fries</h2>
+        <span class="arrow">▼</span>
+    </div>
+</section>
+
+<div id="menuDetails"></div>
+
+<div id="cart">
+    <h2>🛒 Cart</h2>
+    <ul id="cartItems"></ul>
+    <h3>Total: ₹<span id="total">0</span></h3>
+    <button id="orderBtn" onclick="placeOrder()">
+        Place Order
+    </button>
+</div>
+</div>
+    <style>
+   *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#000;
+    min-height:100vh;
+}
+
+/* Header */
+header{
+    background:#000000;
+    border-bottom:3px solid #ff0000;
+    text-align:center;
+    padding:25px;
+}
+
+header h1{
+    color:#ff3333;
+    font-size:2.5rem;
+    text-shadow:0 0 15px red;
+}
+
+header p{
+    color:white;
+    text-shadow:0 0 8px red;
+    margin-top:10px;
+}
+
+/* Menu Section */
+.menu{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:25px;
+    padding-top:450px;
+
+    background:
+    linear-gradient(
+        rgba(0,0,0,0.75),
+        rgba(20,0,0,0.75)
+    ),
+    url("f6a56921-2d4b-45dd-bf06-1b74544a6869.png");
+
+    background-size:cover;
+    background-position:center top;
+    background-repeat:no-repeat;
+    min-height:calc(100vh - 120px);
+}
+
+/* Cards */
+.card{
+    width:280px;
+    background:rgba(15,15,15,0.95);
+    border:2px solid #ff0000;
+    border-radius:15px;
+    overflow:hidden;
+    text-align:center;
+    color:white;
+    box-shadow:0 0 15px rgba(255,0,0,0.5);
+    transition:0.4s;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 0 25px rgba(255,0,0,0.9);
+}
+
+.card img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+}
+
+.card h2{
+    color:#ff4444;
+    margin:12px 0;
+}
+
+.card p{
+    color:#dddddd;
+    padding:0 15px;
+}
+
+.card h3{
+    color:#ffcc00;
+    margin:12px 0;
+    font-size:22px;
+}
+
+/* Buttons */
+.card button{
+    background:#ff0000;
+    color:white;
+    border:none;
+    padding:12px 25px;
+    margin-bottom:15px;
+    border-radius:25px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.card button:hover{
+    background:#cc0000;
+    box-shadow:0 0 15px red;
+}
+#menuDetails{
+    width:90%;
+    margin:30px auto;
+    background:rgba(0,0,0,0.9);
+    border:2px solid red;
+    border-radius:15px;
+    color:white;
+    padding:20px;
+    display:none;
+}
+
+#menuDetails h2{
+    color:#ff4444;
+    margin-bottom:15px;
+}
+
+#menuDetails ul{
+    list-style:none;
+}
+
+#menuDetails li{
+    padding:10px;
+    border-bottom:1px solid #333;
+}
+.item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px;
+    border-bottom:1px solid #333;
+}
+
+.item button{
+    background:#ff0000;
+    color:white;
+    border:none;
+    padding:8px 15px;
+    border-radius:20px;
+    cursor:pointer;
+}
+
+.item button:hover{
+    background:#cc0000;
+}
+#cart{
+    width:90%;
+    margin:30px auto;
+    padding:20px;
+    background:#111;
+    border:2px solid red;
+    border-radius:15px;
+    color:white;
+}
+
+#cart h2{
+    color:#ff4444;
+    margin-bottom:10px;
+}
+
+#cartItems{
+    list-style:none;
+}
+
+#cartItems li{
+    padding:10px;
+    border-bottom:1px solid #333;
+}
+
+#total{
+    color:#ffcc00;
+}
+#cart{
+    width:90%;
+    margin:30px auto;
+    padding:20px;
+    background:#111;
+    border:2px solid red;
+    border-radius:15px;
+    color:white;
+}
+
+#cartItems{
+    list-style:none;
+    margin-top:15px;
+}
+
+#cartItems li{
+    padding:10px;
+    border-bottom:1px solid #333;
+}
+
+#orderBtn{
+    background:red;
+    color:white;
+    border:none;
+    padding:12px 25px;
+    border-radius:25px;
+    cursor:pointer;
+    margin-top:15px;
+}
+.arrow{
+    display:block;
+    color:#ffcc00;
+    font-size:24px;
+    margin-bottom:10px;
+    animation:bounce 1.5s infinite;
+}
+
+@keyframes bounce{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(5px);
+    }
+}
+</style>
+</body>
+<script>
+
+function showMenu(type){
+
+const menu = {
+
+burger: `
+<h2>🍔 Burger Varieties</h2>
+
+<div class="item">
+    <span>Chicken Burger - ₹149</span>
+    <button onclick="addToCart('Chicken Burger',149)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Double Cheese Burger - ₹199</span>
+    <button onclick="addToCart('Double Cheese Burger',199)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Double Patty Burger - ₹249</span>
+    <button onclick="addToCart('Double Patty Burger',249)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Beef Burger - ₹229</span>
+    <button onclick="addToCart('Beef Burger',229)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Veg Burger - ₹119</span>
+    <button onclick="addToCart('Veg Burger',119)">Add to Cart</button>
+</div>
+`,
+
+sandwich: `
+<h2>🥪 Sandwich Varieties</h2>
+
+<div class="item">
+    <span>Chicken Sandwich - ₹129</span>
+    <button onclick="addToCart('Chicken Sandwich',129)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Paneer Sandwich - ₹119</span>
+    <button onclick="addToCart('Paneer Sandwich',119)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Corn Sandwich - ₹99</span>
+    <button onclick="addToCart('Corn Sandwich',99)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Chicken Corn Sandwich - ₹149</span>
+    <button onclick="addToCart('Chicken Corn Sandwich',149)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Veg Sandwich - ₹89</span>
+    <button onclick="addToCart('Veg Sandwich',89)">Add to Cart</button>
+</div>
+`,
+
+meat: `
+<h2>🍖 Meat Varieties</h2>
+
+<div class="item">
+    <span>Grill Chicken - ₹450</span>
+    <button onclick="addToCart('Grill Chicken',450)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Chicken Shawarema - ₹149</span>
+    <button onclick="addToCart('Chicken Shawarema',149)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Barbeque Chicken - ₹399</span>
+    <button onclick="addToCart('Barbeque Chicken',399)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Tandoori Chicken - ₹299</span>
+    <button onclick="addToCart('Tandoori Chicken',229)">Add to Cart</button>
+</div>
+`,
+
+mojito: `
+<h2>🍹 Mojito Varieties</h2>
+
+<div class="item">
+    <span>Chicken Burger - ₹99</span>
+    <button onclick="addToCart('Chicken Burger',99)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Lime - ₹99</span>
+    <button onclick="addToCart('Lime',99)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Blue curaco - ₹99</span>
+    <button onclick="addToCart('Blue curacao',99)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Beef Burger - ₹99</span>
+    <button onclick="addToCart('Watermelon',99)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Strawberry - ₹99</span>
+    <button onclick="addToCart('Strawberry',99)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Mint - ₹99</span>
+    <button onclick="addToCart('Mint',99)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Mango - ₹99</span>
+    <button onclick="addToCart('Mango',99)">Add to Cart</button>
+</div>
+`,
+
+milkshake: `
+<h2>🥤 Milkshake Varieties</h2>
+
+<div class="item">
+    <span>Vanilla - ₹149</span>
+    <button onclick="addToCart('Vanilla',149)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Chocolate - ₹149</span>
+    <button onclick="addToCart('Chocolate',149)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Strawberry - ₹149</span>
+    <button onclick="addToCart('Strawberry',149)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Rose Milk - ₹149</span>
+    <button onclick="addToCart('Rose Milk',149)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Banana - ₹149</span>
+    <button onclick="addToCart('Banana',149)">Add to Cart</button>
+</div>
+`,
+
+
+fries: `
+<h2>🍟 Fries Varieties</h2>
+
+<div class="item">
+    <span>Smiley Fries - ₹129</span>
+    <button onclick="addToCart('Smiley',129)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Chicken Nuggets - ₹179</span>
+    <button onclick="addToCart('Chicken Nuggets',129)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>French Fries - ₹99</span>
+    <button onclick="addToCart('French Fries',99)">Add to Cart</button>
+</div>
+
+<div class="item">
+    <span>Peri Peri Fries - ₹149</span>
+    <button onclick="addToCart('Peri Peri Fries',149)">Add to Cart</button>
+</div>
+`,
+
+};
+
+document.getElementById("menuDetails").style.display="block";
+document.getElementById("menuDetails").innerHTML=menu[type];
+document.getElementById("menuDetails")
+.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+});
+
+}
+let cart = [];
+let total = 0;
+
+function addToCart(name, price){
+
+    cart.push({
+        name:name,
+        price:price
+    });
+
+    total += price;
+
+    displayCart();
+}
+
+function displayCart(){
+
+    let cartItems =
+    document.getElementById("cartItems");
+
+    cartItems.innerHTML = "";
+
+    cart.forEach((item,index)=>{
+
+        cartItems.innerHTML += `
+        <li>
+            ${item.name} - ₹${item.price}
+            <button onclick="removeItem(${index})">
+            ❌
+            </button>
+        </li>`;
+    });
+
+    document.getElementById("total")
+    .innerText = total;
+}
+
+function removeItem(index){
+
+    total -= cart[index].price;
+
+    cart.splice(index,1);
+
+    displayCart();
+}
+
+function placeOrder(){
+
+    if(cart.length===0){
+        alert("Cart is Empty!");
+        return;
+    }
+
+    let orderText = "HotZone Order%0A";
+    orderText += "Table No: 101%0A%0A";
+
+    cart.forEach(item=>{
+        orderText += item.name + " - ₹" + item.price + "%0A";
+    });
+
+    orderText += "%0ATotal: ₹" + total;
+
+    window.location.href =
+    "sms:+916381684020?body=" + orderText;
+}
+</script>
+</html>
